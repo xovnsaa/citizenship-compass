@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Questions | Citizenship Compass</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header class="app-header">
+    <div>
+        <h1 th:text="#{nav.questions}">Review Questions</h1>
+    </div>
+    <nav class="header-actions" th:attr="aria-label=#{nav.actions}">
+        <div th:replace="~{fragments/language-switch :: switcher}"></div>
+        <a class="button secondary" th:href="@{/dashboard}" th:text="#{nav.dashboard}">Dashboard</a>
+        <form th:action="@{/logout}" method="post">
+            <button class="button secondary" type="submit" th:text="#{nav.logout}">Log Out</button>
+        </form>
+    </nav>
+</header>
+
+<main class="content-shell">
+    <div class="alert success" th:if="${successMessage}" th:text="${successMessage}"></div>
+    <section class="welcome-panel">
+        <h2 th:text="#{questions.study}">Civics Study Questions</h2>
+        <p th:text="#{questions.available(${questionCount})}">10 active questions available for review.</p>
+
+        <nav class="study-mode-switch" th:attr="aria-label=#{questions.studyMode}">
+            <a class="button secondary" th:classappend="${!revealMode} ? ' active' : ''"
+               th:href="${searchMode} ? @{/questions(mode='show',q=${query})} : @{/questions(mode='show')}"
+               th:text="#{questions.showAnswers}">Show Answers</a>
+            <a class="button secondary" th:classappend="${revealMode} ? ' active' : ''"
+               th:href="${searchMode} ? @{/questions(mode='reveal',q=${query})} : @{/questions(mode='reveal')}"
+               th:text="#{questions.tapToReveal}">Tap to Reveal</a>
+        </nav>
+
+        <form class="search-form" th:action="@{/questions}" method="get" role="search">
+            <input type="hidden" name="mode" th:value="${studyMode}">
+            <div class="search-field">
+                <label for="question-search" th:text="#{questions.searchLabel}">Search questions and answers</label>
+                <input id="question-search" name="q" type="search" th:value="${query}"
+                       maxlength="100" th:placeholder="#{questions.searchPlaceholder}">
+            </div>
+            <button class="button primary" type="submit" th:text="#{questions.search}">Search</button>
+            <a class="button secondary" th:if="${searchMode}" th:href="@{/questions(mode=${studyMode})}" th:text="#{questions.viewAll}">View All Questions</a>
+        </form>
+        <p class="field-error" th:if="${searchError}" th:text="${searchError}"></p>
+    </section>
+
+    <section class="search-summary" th:if="${searchMode and searchError == null}">
+        <h2 th:text="#{questions.results(${resultCount}, ${query})}">Search results</h2>
+    </section>
+
+    <section class="empty-state" th:if="${searchMode and searchError == null and #lists.isEmpty(questions)}">
+        <h2 th:text="#{questions.noMatches}">No matching questions</h2>
+        <p th:text="#{questions.noMatchesHelp}">Try a different keyword or return to the full question list.</p>
+        <a class="button secondary" th:href="@{/questions(mode=${studyMode})}" th:text="#{questions.viewAll}">View All Questions</a>
+    </section>
+
+    <section class="question-list" th:attr="aria-label=#{questions.listLabel}" th:unless="${#lists.isEmpty(questions)}">
+        <article class="question-card" th:each="question, iterStat : ${questions}"
+                 th:classappend="${favoriteQuestionIds.contains(question.id)} ? ' is-favorite' : ''">
+            <span class="favorite-star" th:if="${favoriteQuestionIds.contains(question.id)}"
+                  th:attr="aria-label=#{questions.favorite},title=#{questions.favorite}">★</span>
+            <h2 th:text="${question.questionText}">What is the supreme law of the land?</h2>
+            <div th:unless="${revealMode}">
+                <p class="answer-label" th:text="#{questions.answer}">Answer</p>
+                <p class="answer-text" th:text="${question.answerText}">The Constitution</p>
+            </div>
+            <details class="answer-reveal" th:if="${revealMode}">
+                <summary th:text="#{questions.revealAnswer}">Reveal answer</summary>
+                <p class="answer-text" th:text="${question.answerText}">The Constitution</p>
+            </details>
+            <div class="card-actions">
+                <form th:action="@{/favorites/{id}/toggle(id=${question.id})}" method="post">
+                    <input th:if="${searchMode}" type="hidden" name="q" th:value="${query}">
+                    <input type="hidden" name="mode" th:value="${studyMode}">
+                    <button class="button secondary" type="submit"
+                            th:text="${favoriteQuestionIds.contains(question.id)} ? #{questions.removeFavorite} : #{questions.addFavorite}">
+                        Add to Favorites
+                    </button>
+                </form>
+            </div>
+            <span class="question-position" th:text="#{quiz.position(${iterStat.count}, ${iterStat.size})}">Question 1 of 128</span>
+        </article>
+    </section>
+</main>
+</body>
+</html>

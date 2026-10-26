@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results | Citizenship Compass</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header class="app-header">
+    <div>
+        <h1 th:text="#{results.title}">Quiz Results</h1>
+    </div>
+    <div class="header-actions">
+        <div th:replace="~{fragments/language-switch :: switcher}"></div>
+        <a class="button secondary" th:href="@{/dashboard}" th:text="#{nav.dashboard}">Dashboard</a>
+    </div>
+</header>
+
+<main class="content-shell narrow">
+    <div class="alert success" th:if="${successMessage}" th:text="${successMessage}"></div>
+    <section class="score-panel">
+        <p class="score" th:text="${attempt.score} + ' / ' + ${attempt.totalQuestions}">4 / 5</p>
+        <h2 th:text="${attempt.percentage} + '%'">80%</h2>
+        <p th:text="#{results.correctCount}">Questions answered correctly</p>
+    </section>
+
+    <div class="question-list">
+        <section class="question-card result-card" th:each="answer, status : ${attempt.answers}">
+            <div class="question-meta">
+                <span th:text="#{questions.number(${status.count})}">Question 1</span>
+                <span class="result-badge" th:classappend="${answer.correct} ? ' correct' : ' incorrect'"
+                      th:text="${answer.correct} ? #{results.correct} : #{results.review}">Correct</span>
+            </div>
+            <h2 th:text="${answer.question.questionText}">Question</h2>
+            <p><strong th:text="#{results.yourAnswer}">Your answer:</strong> <span th:text="${answer.selectedAnswer}">Answer</span></p>
+            <p th:unless="${answer.correct}"><strong th:text="#{results.acceptedAnswer}">Accepted answer:</strong>
+                <span th:text="${answer.question.answerText}">Accepted answer</span>
+            </p>
+            <div class="card-actions" th:unless="${answer.correct}">
+                <a class="button secondary"
+                   th:href="@{/notes/new(questionId=${answer.question.id},quizAttemptId=${attempt.id})}" th:text="#{results.addNote}">Add Study Note</a>
+            </div>
+        </section>
+    </div>
+
+    <div class="button-row">
+        <a class="button primary" th:href="@{/quiz}" th:text="#{results.another}">Take Another Quiz</a>
+        <a class="button secondary" th:href="@{/questions}" th:text="#{nav.questions}">Review Questions</a>
+    </div>
+</main>
+</body>
+</html>

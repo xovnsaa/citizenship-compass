@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle} + ' | Citizenship Compass'">Study Note | Citizenship Compass</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header class="app-header">
+    <div>
+        <h1 th:text="${pageTitle}">Study Note</h1>
+    </div>
+    <nav class="header-actions" aria-label="Page actions">
+        <div th:replace="~{fragments/language-switch :: switcher}"></div>
+        <a class="button secondary" th:href="@{/notes}" th:text="#{nav.notes}">Study Notes</a>
+        <a class="button secondary" th:href="@{/dashboard}" th:text="#{nav.dashboard}">Dashboard</a>
+    </nav>
+</header>
+
+<main class="content-shell narrow">
+    <section class="welcome-panel">
+        <form th:action="@{${formAction}}" th:object="${studyNoteForm}" method="post" class="form-card">
+            <input th:if="${quizAttemptId != null}" type="hidden" name="quizAttemptId" th:value="${quizAttemptId}">
+            <div>
+                <label for="title" th:text="#{notes.title}">Title</label>
+                <input id="title" th:field="*{title}" maxlength="120" required>
+                <p class="field-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+            </div>
+
+            <div>
+                <label for="content" th:text="#{notes.note}">Note</label>
+                <textarea id="content" th:field="*{content}" rows="9" maxlength="2000" required></textarea>
+                <p class="field-error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
+            </div>
+
+            <div class="button-row flush">
+                <button class="button primary" type="submit" th:text="#{notes.save}">Save Note</button>
+                <a class="button secondary" th:href="@{${cancelUrl}}" th:text="#{notes.cancel}">Cancel</a>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In | Citizenship Compass</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script defer th:src="@{/js/password-toggle.js}"></script>
+</head>
+<body>
+<main class="auth-shell">
+    <section class="auth-panel compact">
+        <h1 th:text="#{auth.login}">Log in</h1>
+
+        <div class="alert success" th:if="${registrationSuccess}" th:text="${registrationSuccess}"></div>
+        <div class="alert" th:if="${param.error}" th:text="#{auth.error}">The email or password was not correct.</div>
+        <div class="alert success" th:if="${param.logout}" th:text="#{auth.logoutSuccess}">You have been logged out.</div>
+
+        <form th:action="@{/login}" method="post" class="form-card">
+            <label for="email" th:text="#{auth.email}">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+
+            <label for="password" th:text="#{auth.password}">Password</label>
+            <div class="password-field">
+                <input id="password" name="password" type="password" autocomplete="current-password" required>
+                <button class="password-toggle" type="button" data-password-toggle="password"
+                        th:attr="data-show-label=#{auth.showPassword},data-hide-label=#{auth.hidePassword}"
+                        aria-pressed="false" th:text="#{auth.showPassword}">Show password</button>
+            </div>
+
+            <label class="checkbox-row" for="remember-me">
+                <input id="remember-me" name="remember-me" type="checkbox">
+                <span th:text="#{auth.remember}">Keep me signed in</span>
+            </label>
+
+            <button class="button primary full" type="submit" th:text="#{auth.login}">Log In</button>
+        </form>
+
+        <p class="helper-text"><span th:text="#{auth.needAccount}">Need an account?</span>
+            <a th:href="@{/register}" th:text="#{auth.createOne}">Create one</a>.</p>
+        <div class="button-row">
+            <a th:href="@{/login(lang=en)}" th:text="#{nav.english}">English</a>
+            <a th:href="@{/login(lang=es)}" th:text="#{nav.spanish}">Español</a>
+        </div>
+    </section>
+</main>
+</body>
+</html>

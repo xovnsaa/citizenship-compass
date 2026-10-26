@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: citizenship-compass
+    runtime: docker
+    plan: free
+    region: oregon
+    branch: main
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /login
+    autoDeployTrigger: commit
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DATABASE_HOST
+        # Set from the active PostgreSQL instance in the Render dashboard.
+        # Preserve the replacement database connection on Blueprint updates.
+        sync: false
+      - key: DATABASE_PORT
+        sync: false
+      - key: DATABASE_NAME
+        sync: false
+      - key: DATABASE_USERNAME
+        sync: false
+      - key: DATABASE_PASSWORD
+        sync: false
+      - key: REMEMBER_ME_KEY
+        generateValue: true

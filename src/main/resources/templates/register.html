@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Citizenship Compass</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script defer th:src="@{/js/password-toggle.js}"></script>
+</head>
+<body>
+<main class="auth-shell">
+    <section class="auth-panel">
+        <h1 th:text="#{register.title}">Create your account</h1>
+
+        <form th:action="@{/register}" th:object="${registrationForm}" method="post" class="form-card two-column">
+            <div>
+                <label for="firstName" th:text="#{register.firstName}">First name</label>
+                <input id="firstName" th:field="*{firstName}" autocomplete="given-name" required>
+                <p class="field-error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
+            </div>
+
+            <div>
+                <label for="lastName" th:text="#{register.lastName}">Last name</label>
+                <input id="lastName" th:field="*{lastName}" autocomplete="family-name" required>
+                <p class="field-error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
+            </div>
+
+            <div class="span-two">
+                <label for="email" th:text="#{auth.email}">Email</label>
+                <input id="email" th:field="*{email}" type="email" autocomplete="email" required>
+                <p class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+            </div>
+
+            <div class="span-two">
+                <label for="password" th:text="#{auth.password}">Password</label>
+                <div class="password-field">
+                    <input id="password" th:field="*{password}" type="password" autocomplete="new-password" required>
+                    <button class="password-toggle" type="button" data-password-toggle="password"
+                            th:attr="data-show-label=#{auth.showPassword},data-hide-label=#{auth.hidePassword}"
+                            aria-pressed="false" th:text="#{auth.showPassword}">Show password</button>
+                </div>
+                <p class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+            </div>
+
+            <div class="span-two">
+                <label for="preferredLanguage" th:text="#{register.language}">Interface language</label>
+                <select id="preferredLanguage" th:field="*{preferredLanguage}">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                </select>
+                <p class="field-error" th:if="${#fields.hasErrors('preferredLanguage')}" th:errors="*{preferredLanguage}"></p>
+            </div>
+
+            <button class="button primary full span-two" type="submit" th:text="#{auth.create}">Create Account</button>
+        </form>
+
+        <p class="helper-text"><span th:text="#{register.already}">Already have an account?</span>
+            <a th:href="@{/login}" th:text="#{auth.login}">Log in</a>.</p>
+        <div class="button-row">
+            <a th:href="@{/register(lang=en)}" th:text="#{nav.english}">English</a>
+            <a th:href="@{/register(lang=es)}" th:text="#{nav.spanish}">Español</a>
+        </div>
+    </section>
+</main>
+</body>
+</html>

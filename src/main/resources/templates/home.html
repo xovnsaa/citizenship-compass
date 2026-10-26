@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizenship Compass</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<main class="auth-shell">
+    <section class="auth-panel landing-panel">
+        <h1 th:text="#{home.title}">Citizenship Compass</h1>
+        <p class="lead" th:text="#{home.lead}">Study for the U.S. civics test with simple tools. Review questions, take practice quizzes, save favorites, and track progress in one accessible study space.</p>
+        <ul class="landing-benefits">
+            <li th:text="#{home.benefit.questions}">128 official civics questions</li>
+            <li th:text="#{home.benefit.personal}">Personal notes and favorites</li>
+            <li th:text="#{home.benefit.progress}">Practice scores that track your progress</li>
+        </ul>
+        <div class="button-row">
+            <a class="button primary" th:href="@{/register}" th:text="#{auth.create}">Create Account</a>
+            <a class="button secondary" th:href="@{/login}" th:text="#{auth.login}">Log In</a>
+        </div>
+        <div class="button-row">
+            <a th:href="@{/(lang=en)}" th:text="#{nav.english}">English</a>
+            <a th:href="@{/(lang=es)}" th:text="#{nav.spanish}">Español</a>
+        </div>
+    </section>
+</main>
+</body>
+</html>

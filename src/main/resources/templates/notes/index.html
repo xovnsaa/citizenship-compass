@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Notes | Citizenship Compass</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header class="app-header">
+    <div>
+        <h1 th:text="#{nav.notes}">Study Notes</h1>
+    </div>
+    <nav class="header-actions" aria-label="Page actions">
+        <div th:replace="~{fragments/language-switch :: switcher}"></div>
+        <a class="button primary" th:href="@{/notes/new}" th:text="#{notes.add}">Add Note</a>
+        <a class="button secondary" th:href="@{/dashboard}" th:text="#{nav.dashboard}">Dashboard</a>
+        <form th:action="@{/logout}" method="post">
+            <button class="button secondary" type="submit" th:text="#{nav.logout}">Log Out</button>
+        </form>
+    </nav>
+</header>
+
+<main class="content-shell">
+    <div class="alert success" th:if="${successMessage}" th:text="${successMessage}">Study note saved.</div>
+
+    <section class="empty-state" th:if="${#lists.isEmpty(notes)}">
+        <h2 th:text="#{notes.empty}">No study notes yet</h2>
+        <p th:text="#{notes.emptyHelp}">Start a note for vocabulary, interview reminders, or civics topics you want to review again.</p>
+        <a class="button primary" th:href="@{/notes/new}" th:text="#{notes.createFirst}">Create First Note</a>
+    </section>
+
+    <section class="note-list" th:attr="aria-label=#{notes.listLabel}" th:if="${!#lists.isEmpty(notes)}">
+        <article class="note-card" th:each="note : ${notes}">
+            <h2 th:text="${note.title}">Note title</h2>
+            <p th:text="${note.content}">Note content</p>
+            <div class="card-actions">
+                <a class="button secondary" th:href="@{/notes/{id}/edit(id=${note.id})}" th:text="#{notes.edit}">Edit</a>
+                <form th:action="@{/notes/{id}/delete(id=${note.id})}" method="post">
+                    <button class="button danger" type="submit" th:text="#{notes.delete}">Delete</button>
+                </form>
+            </div>
+        </article>
+    </section>
+</main>
+</body>
+</html>

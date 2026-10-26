@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav class="language-switch" th:fragment="switcher" th:attr="aria-label=#{nav.language}">
+    <a href="?lang=en" th:classappend="${#locale.language == 'en'} ? ' active'" th:text="#{nav.english}">English</a>
+    <span aria-hidden="true">/</span>
+    <a href="?lang=es" th:classappend="${#locale.language == 'es'} ? ' active'" th:text="#{nav.spanish}">Español</a>
+</nav>
+</body>
+</html>

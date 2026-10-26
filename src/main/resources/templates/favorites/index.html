@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorite Questions | Citizenship Compass</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header class="app-header">
+    <div>
+        <h1 th:text="#{nav.favorites}">Favorite Questions</h1>
+    </div>
+    <nav class="header-actions" aria-label="Page actions">
+        <div th:replace="~{fragments/language-switch :: switcher}"></div>
+        <a class="button secondary" th:href="@{/questions}" th:text="#{nav.questions}">Review Questions</a>
+        <a class="button secondary" th:href="@{/dashboard}" th:text="#{nav.dashboard}">Dashboard</a>
+    </nav>
+</header>
+
+<main class="content-shell">
+    <div class="alert success" th:if="${successMessage}" th:text="${successMessage}"></div>
+
+    <section class="welcome-panel">
+        <h2 th:text="#{favorites.saved}">Saved for Later</h2>
+        <p th:text="#{favorites.count(${#lists.size(favorites)})}">
+            0 favorite questions.
+        </p>
+    </section>
+
+    <section class="empty-state" th:if="${#lists.isEmpty(favorites)}">
+        <h2 th:text="#{favorites.empty}">No favorite questions yet</h2>
+        <p th:text="#{favorites.emptyHelp}">Save questions from the review page to find them here.</p>
+        <a class="button primary" th:href="@{/questions}" th:text="#{nav.questions}">Review Questions</a>
+    </section>
+
+    <section class="question-list" th:attr="aria-label=#{favorites.listLabel}" th:unless="${#lists.isEmpty(favorites)}">
+        <article class="question-card is-favorite" th:each="favorite : ${favorites}">
+            <span class="favorite-star" th:attr="aria-label=#{questions.favorite},title=#{questions.favorite}">★</span>
+            <h2 th:text="${favorite.question.questionText}">Question</h2>
+            <p class="answer-label" th:text="#{questions.answer}">Answer</p>
+            <p class="answer-text" th:text="${favorite.question.answerText}">Answer</p>
+            <div class="card-actions">
+                <form th:action="@{/favorites/{id}/remove(id=${favorite.question.id})}" method="post">
+                    <button class="button danger" type="submit" th:text="#{questions.removeFavorite}">Remove Favorite</button>
+                </form>
+            </div>
+        </article>
+    </section>
+</main>
+</body>
+</html>

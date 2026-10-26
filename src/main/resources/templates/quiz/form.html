@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Quiz | Citizenship Compass</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header class="app-header">
+    <div>
+        <h1 th:text="#{nav.quiz}">Practice Quiz</h1>
+    </div>
+    <div class="header-actions">
+        <div th:replace="~{fragments/language-switch :: switcher}"></div>
+        <a class="button secondary" th:href="@{/dashboard}" th:text="#{nav.dashboard}">Dashboard</a>
+    </div>
+</header>
+
+<main class="content-shell narrow">
+    <p class="lead" th:text="#{quiz.instructions}">Choose one answer for each of the 10 randomly selected questions.</p>
+    <div class="button-row flush">
+        <a class="button secondary" th:href="@{/questions}" th:text="#{quiz.view128}">View All 128 Questions</a>
+    </div>
+    <div class="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+    <div class="empty-state" th:if="${#lists.isEmpty(questions)}">
+        <h2 th:text="#{quiz.empty}">No questions available</h2>
+        <p th:text="#{quiz.emptyHelp}">Please try again after questions have been added.</p>
+    </div>
+
+    <form th:unless="${#lists.isEmpty(questions)}" th:action="@{/quiz}" th:object="${quizSubmission}" method="post" class="quiz-form">
+        <section class="question-card" th:each="question, status : ${questions}">
+            <input type="hidden" name="questionIds" th:value="${question.id}">
+            <div class="quiz-position" th:text="#{quiz.shortPosition(${status.count}, ${status.size})}">1/10</div>
+            <fieldset class="choice-group">
+                <legend th:text="${question.questionText}">Question</legend>
+                <label class="choice-row" th:each="option : ${question.options}"
+                       th:for="${'answer-' + question.id + '-' + option.key}">
+                    <input type="radio"
+                           th:id="${'answer-' + question.id + '-' + option.key}"
+                           th:name="${'answers[' + question.id + ']'}"
+                           th:value="${option.key}"
+                           th:checked="${quizSubmission.answers.get(question.id) == option.key}"
+                           required>
+                    <span><strong th:text="${option.key} + '.'">A.</strong>
+                        <span th:text="${option.value}">Choice</span>
+                    </span>
+                </label>
+            </fieldset>
+        </section>
+        <button class="button primary full" type="submit" th:text="#{quiz.submit}">Submit Quiz</button>
+    </form>
+</main>
+</body>
+</html>

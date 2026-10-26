@@ -1,0 +1,19 @@
+.DS_Store
+
+# Build output
+target/
+out/
+*.log
+
+# Local environment
+.env
+/data/
+
+# IntelliJ local/project files
+.idea/
+*.iml
+
+.env.*
+!.env.example
+outputs/
+artifact_work/

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | Citizenship Compass</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<main class="auth-shell">
+    <section class="auth-panel compact">
+        <h1 th:text="#{error.notFound}">We could not find that item</h1>
+        <p class="lead" th:text="${message}">The requested item was not found.</p>
+        <div class="button-row">
+            <a class="button primary" th:href="@{/dashboard}" th:text="#{error.returnDashboard}">Return to Dashboard</a>
+        </div>
+    </section>
+</main>
+</body>
+</html>

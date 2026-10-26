@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Report | Citizenship Compass</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header class="app-header">
+    <div>
+        <h1 th:text="#{report.title}">Citizenship Practice Progress Report</h1>
+    </div>
+    <nav class="header-actions" aria-label="Page actions">
+        <div th:replace="~{fragments/language-switch :: switcher}"></div>
+        <a class="button primary" th:href="@{/quiz}" th:text="#{nav.quiz}">Take a Quiz</a>
+        <a class="button secondary" th:href="@{/dashboard}" th:text="#{nav.dashboard}">Dashboard</a>
+    </nav>
+</header>
+
+<main class="content-shell">
+    <section class="empty-state" th:if="${#lists.isEmpty(attempts)}">
+        <h2 th:text="#{report.empty}">No quiz attempts yet</h2>
+        <p th:text="#{report.emptyHelp}">Complete a practice quiz to begin tracking your progress.</p>
+        <a class="button primary" th:href="@{/quiz}" th:text="#{report.firstQuiz}">Take Your First Quiz</a>
+    </section>
+
+    <div class="report-table-wrap" th:unless="${#lists.isEmpty(attempts)}">
+        <table class="report-table">
+            <thead>
+            <tr>
+                <th scope="col" th:text="#{report.completed}">Completed</th>
+                <th scope="col" th:text="#{report.score}">Score</th>
+                <th scope="col" th:text="#{report.total}">Total Questions</th>
+                <th scope="col" th:text="#{report.percentage}">Percentage</th>
+                <th scope="col" th:text="#{report.details}">Details</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="attempt : ${attempts}">
+                <td th:text="${#temporals.format(attempt.createdAt, 'MMM d, yyyy h:mm a')}">Aug 9, 2026 12:00 PM</td>
+                <td th:text="${attempt.score}">8</td>
+                <td th:text="${attempt.totalQuestions}">10</td>
+                <td><strong th:text="${attempt.percentage} + '%'">80%</strong></td>
+                <td><a th:href="@{/quiz/results/{id}(id=${attempt.id})}" th:text="#{report.viewResults}">View Results</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

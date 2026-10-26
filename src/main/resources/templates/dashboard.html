@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Citizenship Compass</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header class="app-header">
+    <div>
+        <h1 th:text="#{nav.dashboard}">Dashboard</h1>
+        <p class="dashboard-greeting" th:text="#{dashboard.welcome(${displayName})}">Welcome back, First name Last name</p>
+    </div>
+    <div class="header-actions">
+        <div th:replace="~{fragments/language-switch :: switcher}"></div>
+        <form th:action="@{/logout}" method="post">
+            <button class="button secondary" type="submit" th:text="#{nav.logout}">Log Out</button>
+        </form>
+    </div>
+</header>
+
+<main class="dashboard-grid">
+    <section class="welcome-panel dashboard-hero">
+        <h2 th:text="#{dashboard.goal}">Keep moving toward your citizenship goal.</h2>
+    </section>
+
+    <a class="feature-tile" data-icon="128" th:href="@{/questions}">
+        <span th:text="#{nav.questions}">Review Questions</span>
+        <small th:text="#{dashboard.questionsHelp}">Browse all 128 civics questions and answers.</small>
+    </a>
+    <a class="feature-tile" data-icon="10" th:href="@{/quiz}">
+        <span th:text="#{nav.quiz}">Practice Quiz</span>
+        <small th:text="#{dashboard.quizHelp}">Take a 10-question quiz and save your results.</small>
+    </a>
+    <a class="feature-tile" data-icon="Aa" th:href="@{/notes}">
+        <span th:text="#{nav.notes}">Study Notes</span>
+        <small th:text="#{dashboard.notesHelp}">Create, edit, and delete personal notes.</small>
+    </a>
+    <a class="feature-tile" data-icon="★" th:href="@{/favorites}">
+        <span th:text="#{nav.favorites}">Favorite Questions</span>
+        <small th:text="#{dashboard.favoritesHelp}">Review questions you saved for later.</small>
+    </a>
+    <a class="feature-tile" data-icon="↗" th:href="@{/reports/progress}">
+        <span th:text="#{nav.progress}">Progress Report</span>
+        <small th:text="#{dashboard.progressHelp}">View quiz history and scores.</small>
+    </a>
+</main>
+</body>
+</html>
